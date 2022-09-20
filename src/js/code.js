@@ -1,29 +1,35 @@
-const trigger = document.querySelector('.trigger');
-const modal = document.querySelector('.modal__wrapper');
-const modalWindow = document.querySelector('.modal.-window');
-const message = document.querySelector('.modal.-message');
+const buttons = document.querySelector('.buttons');
+const modalWrapper = document.querySelector('.modal__wrapper');
+let modalWindow;
 
 // добавляю обработчик для кнопки
-trigger.addEventListener('click', function () {
+buttons.addEventListener('click', function (event) {
+  if (!event.target.classList.contains('trigger')) return;
 
-  modal.classList.add('-toggled');
+// Имя модификатора триггера и соответствующего окна совпадают
+  const modalWindowMod = Array.from(event.target.classList).find((item) => {
+    if (item.startsWith('-')) return true;
+  })
+
+  modalWindow = document.querySelector('.modal.' + modalWindowMod);
+
+  modalWrapper.classList.add('-toggled');
   setTimeout(() => modalWindow.classList.add('-toggled'), 0);
 
-  document.addEventListener('click', ruleModal); // обработчик на клик
-  window.addEventListener('keydown', toggleMessageByKey) // обработчик на эскейп
+  document.addEventListener('click', closeModal); // обработчик на клик
+  window.addEventListener('keydown', closeModalByKey) // обработчик на эскейп
 });
 
-function ruleModal(event) {
-  if (!event.target.classList.contains('modal__button') && event.target !== document.querySelector('.modal__close')) return;
+function closeModal(event) {
+  if (!event.target.classList.contains('modal__button') && !event.target.classList.contains('modal__close')) return;
 
   modalWindow.classList.remove('-toggled');
-  setTimeout(() => modal.classList.remove('-toggled'), 200);
-  window.removeEventListener('keydown', toggleMessageByKey);
+  setTimeout(() => modalWrapper.classList.remove('-toggled'), 200);
 }
 
-function toggleMessageByKey(event) {
+function closeModalByKey(event) {
   if (event.code !== 'Escape') return;
 
   modalWindow.classList.remove('-toggled');
-  setTimeout(() => modal.classList.remove('-toggled'), 200);
+  setTimeout(() => modalWrapper.classList.remove('-toggled'), 200);
 }

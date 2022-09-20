@@ -2,6 +2,11 @@
   box-sizing: border-box;
 }
 
+.buttons {
+  display: flex;
+  justify-content: space-around;
+}
+
 .container {
   margin-top: 40px;
   display: flex;
