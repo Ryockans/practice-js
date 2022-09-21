@@ -33,13 +33,17 @@
   border: 2px solid darkblue;
   opacity: 0;
   z-index: 0;
-  transition: margin-top 0.2s, opacity 0.2s;
+  transition: margin-top 200ms, opacity 200ms, z-index 200ms;
 }
 
 .modal.-toggled {
   margin-top: 100px;
   opacity: 1;
   z-index: 2;
+}
+
+.modal__text {
+ margin: 10px auto 30px;
 }
 
 .modal__buttons {
@@ -76,6 +80,11 @@
 
 .modal__button.-confirm:hover {
   background-color: rgba(100, 149, 237, 0.7);
+}
+
+.modal__button.-show{
+  grid-column: 1/2;
+  grid-row: 1/2
 }
 
 .modal__close {

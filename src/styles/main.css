@@ -10,6 +10,10 @@ button:focus{
   outline: none;
 }
 
+body {
+  height: 1000px;
+}
+
 .container {
   margin: 0 auto;
   display: flex;
