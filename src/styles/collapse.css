@@ -1,12 +1,12 @@
 .collapse {
   margin: 0 auto 100px;
   display: grid;
-  justify-items: center;
 }
 
 .collapse__item{
-  width: 500px; ;
-  padding: 10px 0;
+  width: 500px;
+  height: max-content;
+  position: relative;
   border-bottom: 1px solid #CCCCCC;
   cursor: pointer;
 }
@@ -16,20 +16,26 @@
 }
 
 .collapse__title {
+  margin: 10px 0 20px;
   display: flex;
   align-items: center;
   justify-content: space-between;
 }
 
 .collapse__text {
+  margin-top: -10px;
+  height: 0;
+  padding-top: 0;
   opacity: 0;
-  margin-top: -16px;
-  transition: opacity 0.5s, margin-top 1s;
+  z-index: -1;
+  transition: opacity 0.5s, margin-top 1s, padding-top 1s;
 }
 
 .collapse__text.-show {
+  margin-bottom: 10px;
+  padding-top: 10px ;
+  height: max-content;
   opacity: 1;
-  margin-top: 10px;
 }
 
 .collapse__toggle {

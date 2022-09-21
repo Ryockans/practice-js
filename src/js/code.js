@@ -17,6 +17,8 @@ accordion.addEventListener("click", function (event) {
 });
 
 function toggleTab(event) {
+  console.dir(event.target);
+  if (event.target.classList.contains('collapse__text')) return;
   const element = event.target.closest(".collapse__item");
 
   element.querySelector(".collapse__toggle").classList.toggle("-show");
