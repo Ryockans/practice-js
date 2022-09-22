@@ -1,0 +1,20 @@
+.card  {
+  width: 400px;
+}
+
+.card__content {
+  padding: 10px;
+  min-height: 200px;
+  font-size: 24px;
+  border-bottom: 1px solid rgba(64, 64, 64, 0.5);
+  border-left: 1px solid rgba(64, 64, 64, 0.5);
+  border-right: 1px solid rgba(64, 64, 64, 0.5);
+}
+
+.content {
+  display: none;
+}
+
+.content.-toggled {
+  display: block;
+}

@@ -1,14 +1,29 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <title>Title</title>
-  <link rel="icon" href="favicon.ico" type="image/ico">
-</head>
-<body>
-<div class="container">
-  <h2 class="header">Header</h2>
-  <p class="text">Text</p>
-</div>
-</body>
+  <head>
+    <meta charset="UTF-8" />
+    <title>Практика "Tabs"</title>
+    <link rel="icon" href="favicon.ico" type="image/ico" />
+    <link rel="stylesheet" href="styles/main.css" type="text/css" />
+  </head>
+  <body>
+    <div class="container">
+      <h1 class="header">Tabs</h1>
+      <div class="card">
+        <ul class="card__tabs tabs">
+          <li class="tabs__unit">User</li>
+          <li class="tabs__unit -active">Config</li>
+          <li class="tabs__unit">Role</li>
+          <li class="tabs__unit">Task</li>
+          <li class="tabs__unit -plug"></li>
+        </ul>
+        <div class="card__content">
+          <div class="content -user">User</div>
+          <div class="content -config">Config</div>
+          <div class="content -role">Role</div>
+          <div class="content -task">Task</div>
+        </div>
+      </div>
+    </div>
+  </body>
 </html>

@@ -1,0 +1,39 @@
+.tabs{
+  display: grid;
+  grid-template-columns: max-content max-content max-content max-content 1fr;
+  background-color: rgba(211, 211, 211, 0.5);
+}
+
+.tabs__unit{
+  padding: 4px 10px;
+  border-bottom: 1px solid rgba(64, 64, 64, 0.5);
+  border-top: 1px solid rgba(64, 64, 64, 0.5);
+  grid-row: 2/3;
+  font-size: 24px;
+  cursor: pointer;
+  transition: color 500ms;
+}
+
+.tabs__unit.-active{
+  border-left: 1px solid rgba(64, 64, 64, 0.5);
+  border-right: 1px solid rgba(64, 64, 64, 0.5);
+  background-color: white;
+  border-bottom: none;
+  color: #5d5dd3;
+}
+
+.tabs__unit:first-of-type {
+  border-left: 1px solid rgba(64, 64, 64, 0.5);
+}
+
+.tabs__unit:last-of-type {
+  border-right: 1px solid rgba(64, 64, 64, 0.5);
+}
+
+.tabs__unit:hover{
+  color: #5d5dd3;
+}
+
+.tabs__unit.-plug{
+  cursor: auto;
+}
