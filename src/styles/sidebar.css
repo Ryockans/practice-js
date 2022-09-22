@@ -1,0 +1,12 @@
+.sidebar{
+  /*margin-top: 200px;*/
+  position: sticky;
+  right: 0;
+  height: max-content;
+}
+
+.sidebar__text {
+  padding: 15px;
+  border-radius: 10px;
+  background-color: rgba(100, 100, 100, 0.5);
+}
