@@ -38,3 +38,14 @@
   justify-content: center;
   align-items: center;
 }
+
+.indicator {
+  position: fixed;
+  width: 200px;
+  height: 100px;
+  font-family: "Blogger Sans", sans-serif;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  top: 200px
+}
