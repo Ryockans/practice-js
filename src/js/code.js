@@ -3,6 +3,7 @@ class Modal {
     this.zIndex = 100;
     this.element = document.querySelector('.modal.-' + element);
     this.wrapper = document.querySelector('.modal__wrapper');
+    this.background = document.querySelector('.modal__background');
     this.trigger = document.querySelector('.trigger.-' + element);
     this.cross = this.element.querySelector('.modal__close');
     this.buttons = Array.from(this.element.querySelectorAll('.modal__button'));
@@ -14,36 +15,49 @@ class Modal {
   static OpenedModals = [];
 
   open() {
-    setTimeout(() => this.wrapper.classList.add('-toggled'), 0);
+    if (Modal.OpenedModals.length === 0) {
+      setTimeout(() => this.wrapper.classList.add('-toggled'), 0);
+      setTimeout(() => this.background.style.opacity = '0.3', 200);
+      document.body.style.overflow = 'hidden';
+    }
+
     setTimeout(() => {
       this.element.style.zIndex = this.zIndex + Modal.OpenedModals.length + '';
       this.element.classList.add('-toggled');
     }, 200);
 
+    this.background.style.zIndex = this.zIndex + Modal.OpenedModals.length + '';
+
     Modal.OpenedModals.push(this);
-    console.dir(Modal.OpenedModals);
     this.addListeners();
   }
 
   close() {
-    setTimeout(() => {
-      this.element.style.zIndex = '0';
-      this.element.classList.remove('-toggled');
-    }, 0);
-    setTimeout(() => this.wrapper.classList.remove('-toggled'), 200);
+    this.background.style.zIndex = this.zIndex + Modal.OpenedModals.length - 2 + '';
+    setTimeout(() => this.element.classList.remove('-toggled'), 0);
+    setTimeout(() => this.element.style.zIndex = '0', 200);
     Modal.OpenedModals.pop();
-    console.dir(Modal.OpenedModals);
     this.removeListeners();
+
+    if (Modal.OpenedModals.length === 0) {
+      this.background.style.opacity = '0'
+      setTimeout(() => this.wrapper.classList.remove('-toggled'), 200);
+      document.body.style.overflow = 'auto';
+    }
   }
 
   addListeners() {
     this.element.addEventListener('click', this);
     window.addEventListener('keydown', this);
+
+    if (Modal.OpenedModals.length > 1) window.removeEventListener('keydown', Modal.OpenedModals[Modal.OpenedModals.length - 2]);
   }
 
   removeListeners() {
-      this.element.removeEventListener('click', this);
-      window.removeEventListener('keydown', this);
+    this.element.removeEventListener('click', this);
+    window.removeEventListener('keydown', this);
+
+    if (Modal.OpenedModals.length >= 1) window.addEventListener('keydown', Modal.OpenedModals[Modal.OpenedModals.length - 1]);
   }
 
   handleEvent(event) {
@@ -51,13 +65,14 @@ class Modal {
     const escEvent = (event.type === 'keydown' && event.code === 'Escape')
     const isTrigger = (event.target === this.trigger);
     const isButton = (this.buttons.includes(event.target));
+    const isInternalTrigger = (event.target.classList.contains('trigger'))
     const isCloseButton = (event.target === this.cross);
 
     if (clickEvent && isTrigger) {
       this.open();
     }
 
-    if (clickEvent && (isButton || isCloseButton)) {
+    if (clickEvent && (isButton || isCloseButton) && !isInternalTrigger) {
       this.close();
     }
 
@@ -70,6 +85,7 @@ class Modal {
 new Modal('first');
 new Modal('second');
 new Modal('third');
+new Modal('internal');
 
 for (let modalWindow of Modal.AllModals) {
   modalWindow.trigger.addEventListener('click', modalWindow)

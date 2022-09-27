@@ -1,6 +1,9 @@
 *{
   box-sizing: border-box;
 }
+body{
+  height: 1000px;
+}
 
 .buttons {
   display: flex;
@@ -25,4 +28,55 @@
 
 .content {
   display: none;
+}
+
+
+* {
+  box-sizing: border-box;
+}
+
+button:focus{
+  outline: none;
+}
+
+.container {
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+}
+
+.text {
+  margin-bottom: 150px;
+}
+
+.trigger {
+  padding: 4px 15px;
+  border-radius: 10em;
+  border: 2px solid coral;
+  background-color: bisque;
+  font-weight: bold;
+  font-size: 16px;
+  font-family: "Blogger Sans", sans-serif;
+  color: brown;
+  cursor: pointer;
+}
+
+.trigger.-internal {
+  background-color: rgba(100, 149, 237, 0);
+  border-radius: 5px;
+  border: 1px solid #0f5eec;
+  cursor: pointer;
+  font-weight: bold;
+  font-size: 12px;
+  font-family: "Blogger Sans", sans-serif;
+  color: black;
+}
+
+.trigger:hover {
+  background-color: #ffb86f;
+}
+
+.trigger:active {
+  box-shadow: 0 0 3px #cccccc;
 }

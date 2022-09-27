@@ -31,5 +31,3 @@ yarn.lock
 package-lock.json
 .eslintcache
 .prettierignore
-
-src/js/oldCode.js
