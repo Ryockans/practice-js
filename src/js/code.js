@@ -1,35 +1,76 @@
-const buttons = document.querySelector('.buttons');
-const modalWrapper = document.querySelector('.modal__wrapper');
-let modalWindow;
+class Modal {
+  constructor(element) {
+    this.zIndex = 100;
+    this.element = document.querySelector('.modal.-' + element);
+    this.wrapper = document.querySelector('.modal__wrapper');
+    this.trigger = document.querySelector('.trigger.-' + element);
+    this.cross = this.element.querySelector('.modal__close');
+    this.buttons = Array.from(this.element.querySelectorAll('.modal__button'));
+    Modal.AllModals.push(this);
+  }
 
-// добавляю обработчик для кнопки
-buttons.addEventListener('click', function (event) {
-  if (!event.target.classList.contains('trigger')) return;
+  static AllModals = [];
 
-// Имя модификатора триггера и соответствующего окна совпадают
-  const modalWindowMod = Array.from(event.target.classList).find((item) => {
-    if (item.startsWith('-')) return true;
-  })
+  static OpenedModals = [];
 
-  modalWindow = document.querySelector('.modal.' + modalWindowMod);
+  open() {
+    setTimeout(() => this.wrapper.classList.add('-toggled'), 0);
+    setTimeout(() => {
+      this.element.style.zIndex = this.zIndex + Modal.OpenedModals.length + '';
+      this.element.classList.add('-toggled');
+    }, 200);
 
-  modalWrapper.classList.add('-toggled');
-  setTimeout(() => modalWindow.classList.add('-toggled'), 0);
+    Modal.OpenedModals.push(this);
+    console.dir(Modal.OpenedModals);
+    this.addListeners();
+  }
 
-  document.addEventListener('click', closeModal); // обработчик на клик
-  window.addEventListener('keydown', closeModalByKey) // обработчик на эскейп
-});
+  close() {
+    setTimeout(() => {
+      this.element.style.zIndex = '0';
+      this.element.classList.remove('-toggled');
+    }, 0);
+    setTimeout(() => this.wrapper.classList.remove('-toggled'), 200);
+    Modal.OpenedModals.pop();
+    console.dir(Modal.OpenedModals);
+    this.removeListeners();
+  }
 
-function closeModal(event) {
-  if (!event.target.classList.contains('modal__button') && !event.target.classList.contains('modal__close')) return;
+  addListeners() {
+    this.element.addEventListener('click', this);
+    window.addEventListener('keydown', this);
+  }
 
-  modalWindow.classList.remove('-toggled');
-  setTimeout(() => modalWrapper.classList.remove('-toggled'), 200);
+  removeListeners() {
+      this.element.removeEventListener('click', this);
+      window.removeEventListener('keydown', this);
+  }
+
+  handleEvent(event) {
+    const clickEvent = (event.type === 'click');
+    const escEvent = (event.type === 'keydown' && event.code === 'Escape')
+    const isTrigger = (event.target === this.trigger);
+    const isButton = (this.buttons.includes(event.target));
+    const isCloseButton = (event.target === this.cross);
+
+    if (clickEvent && isTrigger) {
+      this.open();
+    }
+
+    if (clickEvent && (isButton || isCloseButton)) {
+      this.close();
+    }
+
+    if (escEvent) {
+      this.close()
+    }
+  }
 }
 
-function closeModalByKey(event) {
-  if (event.code !== 'Escape') return;
+new Modal('first');
+new Modal('second');
+new Modal('third');
 
-  modalWindow.classList.remove('-toggled');
-  setTimeout(() => modalWrapper.classList.remove('-toggled'), 200);
+for (let modalWindow of Modal.AllModals) {
+  modalWindow.trigger.addEventListener('click', modalWindow)
 }
