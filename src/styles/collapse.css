@@ -28,10 +28,10 @@
   padding-top: 0;
   opacity: 0;
   z-index: -1;
-  transition: opacity 0.5s, margin-top 1s, padding-top 1s;
+  transition: opacity 0.2s, margin-top 0.5s, padding-top 0.5s;
 }
 
-.collapse__text.-show {
+.collapse__text.-toggled {
   margin-bottom: 10px;
   padding-top: 10px ;
   height: max-content;
@@ -48,9 +48,9 @@
   background-repeat: no-repeat;
   border: none;
   transform: rotate(-90deg);
-  transition: transform 1s;
+  transition: transform 0.5s;
 }
 
-.collapse__toggle.-show {
+.collapse__toggle.-toggled {
   transform: rotate(0deg);
 }
