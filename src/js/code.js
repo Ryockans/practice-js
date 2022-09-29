@@ -1,21 +1,54 @@
-const tabs = document.querySelector(".tabs");
-const display = document.querySelector(".card__content");
+class Tabs {
+  constructor(element) {
+    this.element = document.querySelector('.tabs' + element);
+    this.tabs = this.element.querySelector('.tabs__list');
+    this.display = this.element.querySelector('.tabs__content');
+    this.activeTab = this.tabs.querySelector('.-active') || false;
+    this.displayed = this.display.querySelector('.-active') || false;
+  }
 
-displayContent();
+  initialize() {
+    if (!this.activeTab) return;
 
-tabs.addEventListener("click", function (event) {
-  if (event.target.closest(".tabs__unit").classList.contains("-plug")) return;
+    const initialMod = '.-' + this.activeTab.textContent.toLowerCase();
+    const initialContent = this.display.querySelector(initialMod);
 
-  tabs.querySelector(".-active").classList.remove("-active");
-  event.target.closest(".tabs__unit").classList.add("-active");
+    if (this.displayed !== false) return;
+    initialContent.classList.add('-active');
+    this.displayed = initialContent;
+  }
 
-  displayContent();
-});
+  displayContent(tab) {
+    const tabMod = '.-' + tab.textContent.toLowerCase();
+    const tabContent = this.display.querySelector(tabMod);
 
-function displayContent() {
-  const tabName = tabs.querySelector(".-active").textContent.toLowerCase();
+    console.dir(tabContent)
 
-  if (display.querySelector(".-toggled") !== null)
-    display.querySelector(".-toggled").classList.remove("-toggled");
-  display.querySelector(".-" + tabName).classList.add("-toggled");
+    if (this.activeTab !== false) {
+      this.activeTab.classList.remove('-active');
+    }
+    tab.classList.add('-active');
+    this.activeTab = tab;
+
+    if (this.displayed !== false) this.displayed.classList.remove('-active');
+    tabContent.classList.add('-active');
+    this.displayed = tabContent;
+  }
+
+  handleEvent(event) {
+    const tab = event.target.closest('.tabs__unit');
+    const isTab = tab.closest('.tabs__list') === this.tabs;
+    const isPlug = event.target.classList.contains('-plug');
+
+    if (!isTab && isPlug) return;
+    if (tab === this.activeTab) return;
+
+    this.displayContent(tab);
+  }
 }
+
+const tabs = new Tabs('');
+
+console.dir(tabs)
+tabs.initialize();
+tabs.element.addEventListener('click', tabs);
