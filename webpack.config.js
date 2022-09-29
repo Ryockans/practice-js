@@ -3,6 +3,7 @@ const HtmlWebpackPlugin = require("html-webpack-plugin");
 const {CleanWebpackPlugin} = require('clean-webpack-plugin');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
+const ESLintPlugin = require('eslint-webpack-plugin');
 
 module.exports = {
   context: path.resolve(__dirname, 'src'),
@@ -38,7 +39,8 @@ module.exports = {
     }),
     new MiniCssExtractPlugin({
       filename: '[name].css'
-    })
+    }),
+    new ESLintPlugin(),
   ],
   module: {
     rules: [
@@ -48,7 +50,7 @@ module.exports = {
       },
       {
         test: /\.(png|jpg|svg|gif|ico)$/,
-        type: 'asset/resource'
+        use: ['file-loader']
       },
       {
         test: /\.(woff|woff2|ttf|eot)$/,
