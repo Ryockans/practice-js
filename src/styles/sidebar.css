@@ -1,8 +1,8 @@
 .sidebar{
   /*margin-top: 200px;*/
+  max-width: 240px;
   width: 20%;
   position: absolute;
-  right: 0;
   height: max-content;
 }
 

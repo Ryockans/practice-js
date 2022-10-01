@@ -32,5 +32,4 @@ package-lock.json
 .eslintcache
 .prettierignore
 
-src/assets/styles/main.css
-src/assets/styles/main.css.map
+src/js/oldCode.js
