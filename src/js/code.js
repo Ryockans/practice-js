@@ -43,32 +43,37 @@ class StickySidebar {
     this.bottomBorder = Math.round(windowSize.height - this.coords.bottom);
 
     this.setPosition();
-    console.dir(this);
   }
 
   stickyScroll() {
-    this.coords = this.element.getBoundingClientRect();
-    this.topBorder = Math.round(this.coords.top + window.scrollY);
-    this.bottomBorder = Math.round(windowSize.height - this.coords.bottom);
     const stickyPoint = Math.round(windowSize.height - this.coords.height);
     const yOffset = this.coords.top + window.scrollY;
     const isScrollDown = this.oldScroll <= window.scrollY;
+    const isTooLong = this.coords.height >= this.attachCoords.height;
+    const isShorterThanWindow = this.coords.height < windowSize.height;
+    const isTopLimit = this.topBorder <= this.upperSticky;
+    const isNearWindowEdge = Math.round(this.coords.top) < 0;
+    this.coords = this.element.getBoundingClientRect();
+    this.topBorder = Math.round(this.coords.top + window.scrollY);
+    this.bottomBorder = Math.round(windowSize.height - this.coords.bottom);
 
-    if (this.coords.height >= this.attachCoords.height) return;
+    if (isTooLong) return;
 
-    if (this.coords.height < windowSize.height) {
+    if (isShorterThanWindow) {
 
-      if (Math.round(this.coords.top) < 0){
+      if (isNearWindowEdge) {
         this.style.position = 'fixed';
         this.style.top = '0';
-      } else if (this.topBorder <= this.upperSticky) {
+      } else if (isTopLimit) {
         this.style.position = 'absolute';
         this.style.top = this.upperSticky + 'px'
       }
+
       return;
     }
 
     if (this.bottomBorder >= 0) {
+
       if (isScrollDown) {
         this.style.position = 'fixed';
         this.style.top = stickyPoint + 'px';
@@ -76,19 +81,24 @@ class StickySidebar {
         this.style.position = 'absolute';
         this.style.top = yOffset + 'px';
       }
+
     } else if (this.bottomBorder <= stickyPoint) {
+
       if (isScrollDown) {
         this.style.position = 'absolute';
         this.style.top = yOffset + 'px';
       } else {
-        if (this.topBorder <= this.upperSticky) {
+
+        if (isTopLimit) {
           this.style.position = 'absolute';
           this.style.top = this.upperSticky + 'px'
         } else {
           this.style.position = 'fixed';
           this.style.top = 0 + 'px';
         }
+
       }
+
     }
     this.oldScroll = window.scrollY;
   }
