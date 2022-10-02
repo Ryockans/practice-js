@@ -1,6 +1,6 @@
 class Collapse {
-  constructor(elementName, accordion = false) {
-    this.element = document.querySelector('.collapse.-' + elementName);
+  constructor(mod, accordion = false) {
+    this.element = document.querySelector('.collapse.-' + mod);
     this.tabs = this.element.querySelectorAll('.collapse__item');
     this.accordion = accordion;
     this.activeTabs = [];
@@ -35,8 +35,8 @@ class Collapse {
   }
 
   handleEvent(event) {
-    const isTabClick = (event.type === 'click' && targetTab !== null);
-    const targetTab = event.target.closest('.collapse__item');
+    const isTabClick = (event.type === 'click' && targetTab !== false);
+    const targetTab = event.target.closest('.collapse__item') || false;
     const isLocal = Array.from(this.tabs).includes(targetTab);
 
     if (!isLocal || !isTabClick) return;
