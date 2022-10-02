@@ -1,10 +1,10 @@
 class Modal {
-  constructor(element) {
+  constructor(mod) {
     this.zIndex = 100;
-    this.element = document.querySelector('.modal.-' + element);
+    this.element = document.querySelector('.modal.-' + mod);
     this.wrapper = document.querySelector('.modal__wrapper');
     this.background = document.querySelector('.modal__background');
-    this.trigger = document.querySelector('.trigger.-' + element);
+    this.trigger = document.querySelector('.trigger.-' + mod);
     this.cross = this.element.querySelector('.modal__close');
     this.buttons = Array.from(this.element.querySelectorAll('.modal__button'));
     Modal.AllModals.push(this);
@@ -47,17 +47,19 @@ class Modal {
   }
 
   addListeners() {
+    const isInternalWindow = Modal.OpenedModals.length > 1;
     this.element.addEventListener('click', this);
     window.addEventListener('keydown', this);
 
-    if (Modal.OpenedModals.length > 1) window.removeEventListener('keydown', Modal.OpenedModals[Modal.OpenedModals.length - 2]);
+    if (isInternalWindow) window.removeEventListener('keydown', Modal.OpenedModals[Modal.OpenedModals.length - 2]);
   }
 
   removeListeners() {
+    const isNotLastWindow = Modal.OpenedModals.length >= 1;
     this.element.removeEventListener('click', this);
     window.removeEventListener('keydown', this);
 
-    if (Modal.OpenedModals.length >= 1) window.addEventListener('keydown', Modal.OpenedModals[Modal.OpenedModals.length - 1]);
+    if (isNotLastWindow) window.addEventListener('keydown', Modal.OpenedModals[Modal.OpenedModals.length - 1]);
   }
 
   handleEvent(event) {
@@ -86,6 +88,7 @@ new Modal('first');
 new Modal('second');
 new Modal('third');
 new Modal('internal');
+new Modal('second-layer');
 
 for (let modalWindow of Modal.AllModals) {
   modalWindow.trigger.addEventListener('click', modalWindow)

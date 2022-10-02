@@ -75,7 +75,7 @@
   color: white;
 }
 
-.modal__button.-internal {
+.modal__button.trigger {
   grid-column: 1/2;
   grid-row: 1/2
 }
