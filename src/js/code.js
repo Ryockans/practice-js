@@ -1,6 +1,6 @@
 class Tabs {
-  constructor(element) {
-    this.element = document.querySelector('.tabs' + element);
+  constructor(mod) {
+    this.element = document.querySelector('.tabs' + mod);
     this.tabs = this.element.querySelector('.tabs__list');
     this.display = this.element.querySelector('.tabs__content');
     this.activeTab = this.tabs.querySelector('.-active') || false;
