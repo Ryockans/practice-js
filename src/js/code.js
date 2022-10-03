@@ -85,6 +85,7 @@ class StickySidebar {
     } else if (this.bottomBorder <= stickyPoint) {
 
       if (isScrollDown) {
+        if (isTopLimit) return;
         this.style.position = 'absolute';
         this.style.top = yOffset + 'px';
       } else {
