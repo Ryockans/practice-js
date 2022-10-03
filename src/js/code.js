@@ -1,32 +1,47 @@
-import {windowSize} from "./parametres";
-import {windowRecalc} from "./parametres";
-
 class StickySidebar {
   constructor(settings) {
     this.element = settings.element;
     this.attachPoint = settings.attachPoint;
     this.isRight = settings.isRight || false;
-    this.coords = this.element.getBoundingClientRect();
     this.style = this.element.style;
-    this.attachCoords = this.attachPoint.getBoundingClientRect();
-    this.upperSticky = this.attachCoords.top + window.scrollY;
+    this.attachRec = this.attachPoint.getBoundingClientRect();
+    this.upperSticky = this.attachRec.top + window.scrollY;
     this.oldScroll = 0;
-    StickySidebar.AllSidebars.push(this);
+    StickySidebar.AllItems.push(this);
   }
 
-  static AllSidebars = [];
+  static AllItems = [];
+
+  get windowSize() {
+    return {
+      height: document.documentElement.clientHeight,
+      width: document.documentElement.clientWidth
+    }
+  }
+
+  get parameters() {
+    return {
+      stickyPoint: Math.round(this.windowSize.height - this.rec.height),
+      yOffset: this.rec.top + window.scrollY,
+      isTooLong: this.rec.height >= this.attachRec.height,
+      isShorterThanWindow: this.rec.height < this.windowSize.height,
+      isTopLimit: this.topBorder <= this.upperSticky,
+      isNearWindowEdge: Math.round(this.rec.top) < 0,
+    }
+  }
 
   initialize() {
-    const topAttachPoint = this.attachCoords.top;
-
+    const topAttachPoint = this.attachRec.top;
     this.style.position = 'absolute';
     this.style.top = topAttachPoint + 'px';
-    this.setPosition();
+    this.reCalc();
+    window.addEventListener('scroll', this.onScroll.bind(this));
+    window.addEventListener('resize', this.reCalc.bind(this));
   }
 
   setPosition() {
-    const leftAttachPoint = this.attachCoords.left - this.coords.width;
-    const rightAttachPoint = this.attachCoords.right;
+    const leftAttachPoint = this.attachRec.left - this.rec.width;
+    const rightAttachPoint = this.attachRec.right;
 
     if (this.isRight) {
       this.style.left = rightAttachPoint + 'px';
@@ -36,61 +51,63 @@ class StickySidebar {
   }
 
   reCalc() {
-    this.coords = this.element.getBoundingClientRect();
-    this.attachCoords = this.attachPoint.getBoundingClientRect();
-    this.upperSticky = this.attachCoords.top + window.scrollY;
-    this.topBorder = Math.round(this.coords.top + window.scrollY);
-    this.bottomBorder = Math.round(windowSize.height - this.coords.bottom);
+    this.rec = this.element.getBoundingClientRect();
+    this.attachRec = this.attachPoint.getBoundingClientRect();
+    this.upperSticky = this.attachRec.top + window.scrollY;
+    this.topBorder = Math.round(this.rec.top + window.scrollY);
+    this.bottomBorder = Math.round(this.windowSize.height - this.rec.bottom);
 
     this.setPosition();
   }
 
-  stickyScroll() {
-    const stickyPoint = Math.round(windowSize.height - this.coords.height);
-    const yOffset = this.coords.top + window.scrollY;
-    const isScrollDown = this.oldScroll <= window.scrollY;
-    const isTooLong = this.coords.height >= this.attachCoords.height;
-    const isShorterThanWindow = this.coords.height < windowSize.height;
-    const isTopLimit = this.topBorder <= this.upperSticky;
-    const isNearWindowEdge = Math.round(this.coords.top) < 0;
-    this.coords = this.element.getBoundingClientRect();
-    this.topBorder = Math.round(this.coords.top + window.scrollY);
-    this.bottomBorder = Math.round(windowSize.height - this.coords.bottom);
+  onScroll() {
+    this.rec = this.element.getBoundingClientRect();
+    this.isScrollDown = this.oldScroll <= window.scrollY;
+    this.topBorder = Math.round(this.rec.top + window.scrollY);
+    this.bottomBorder = Math.round(this.windowSize.height - this.rec.bottom);
 
-    if (isTooLong) return;
+    if (this.parameters.isTooLong) return;
 
-    if (isShorterThanWindow) {
-
-      if (isNearWindowEdge) {
-        this.style.position = 'fixed';
-        this.style.top = '0';
-      } else if (isTopLimit) {
-        this.style.position = 'absolute';
-        this.style.top = this.upperSticky + 'px'
-      }
-
+    if (this.parameters.isShorterThanWindow) {
+      this.scrollShortSidebar();
       return;
     }
 
+    this.commonScroll();
+
+    this.oldScroll = window.scrollY;
+  }
+
+  scrollShortSidebar() {
+    if (this.parameters.isNearWindowEdge) {
+      this.style.position = 'fixed';
+      this.style.top = '0';
+    } else if (this.parameters.isTopLimit) {
+      this.style.position = 'absolute';
+      this.style.top = this.upperSticky + 'px'
+    }
+  }
+
+  commonScroll() {
     if (this.bottomBorder >= 0) {
 
-      if (isScrollDown) {
+      if (this.isScrollDown) {
         this.style.position = 'fixed';
-        this.style.top = stickyPoint + 'px';
+        this.style.top = this.parameters.stickyPoint + 'px';
       } else {
         this.style.position = 'absolute';
-        this.style.top = yOffset + 'px';
+        this.style.top = this.parameters.yOffset + 'px';
       }
 
-    } else if (this.bottomBorder <= stickyPoint) {
+    } else if (this.bottomBorder <= this.parameters.stickyPoint) {
 
-      if (isScrollDown) {
-        if (isTopLimit) return;
+      if (this.isScrollDown) {
+        if (this.parameters.isTopLimit) return;
         this.style.position = 'absolute';
-        this.style.top = yOffset + 'px';
+        this.style.top = this.parameters.yOffset + 'px';
       } else {
 
-        if (isTopLimit) {
+        if (this.parameters.isTopLimit) {
           this.style.position = 'absolute';
           this.style.top = this.upperSticky + 'px'
         } else {
@@ -101,20 +118,12 @@ class StickySidebar {
       }
 
     }
-    this.oldScroll = window.scrollY;
-  }
-
-  handleEvent(event) {
-    const isScroll = event.type === 'scroll';
-    const isResize = event.type === 'resize';
-
-    if (isScroll) this.stickyScroll();
-    if (isResize) {
-      windowRecalc();
-      this.reCalc();
-    }
   }
 }
+
+
+
+
 
 const main = document.querySelector('.main');
 const sidebarElL = document.querySelector('.sidebar.-left');
@@ -131,10 +140,8 @@ new StickySidebar({
   isRight: true
 })
 
-for (let sidebar of StickySidebar.AllSidebars) {
+for (let sidebar of StickySidebar.AllItems) {
   sidebar.initialize();
-  window.addEventListener('scroll', sidebar);
-  window.addEventListener('resize', sidebar);
 }
 
 
