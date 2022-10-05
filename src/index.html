@@ -2,13 +2,33 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Title</title>
+  <title>To-Do App</title>
   <link rel="icon" href="favicon.ico" type="image/ico">
 </head>
 <body>
 <div class="container">
-  <h2 class="header">Header</h2>
-  <p class="text">Text</p>
+  <h2 class="header">TODO APP</h2>
+  <div class="todo-app">
+    <div class="todo-app__create-task">
+    <input class="todo-app__input" type="text" placeholder="Create a new todo...">
+    <button class="todo-app__add"></button>
+    </div>
+    <div class="todo-app__display">
+      <ul class="todo-app__tasklist">
+      </ul>
+      <div class="todo-app__control-panel">
+        <p class="todo-app__counter">
+          <span class="todo-app__counter-number">0</span> items left
+        </p>
+        <ul class="todo-app__tabs tabs">
+          <li class="todo-app__tab -active" data-status = 'all'>All</li>
+          <li class="todo-app__tab" data-status="active">Active</li>
+          <li class="todo-app__tab" data-status="completed">Completed</li>
+        </ul>
+        <button class="todo-app__clear">Clear Completed</button>
+      </div>
+    </div>
+  </div>
 </div>
 </body>
 </html>
